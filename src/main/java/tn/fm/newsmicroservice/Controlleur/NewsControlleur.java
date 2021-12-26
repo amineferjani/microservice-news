@@ -1,13 +1,22 @@
 package tn.fm.newsmicroservice.Controlleur;
 
 import lombok.AllArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import tn.fm.newsmicroservice.Model.News;
 import tn.fm.newsmicroservice.Model.Writer;
 import tn.fm.newsmicroservice.Service.NewsServices;
 
+import java.io.IOException;
+import java.nio.file.Path;
 import java.util.List;
 import java.util.Optional;
+
+import static java.nio.file.Files.copy;
+import static java.nio.file.Paths.get;
+
 
 @RestController
 @RequestMapping("api/news")
@@ -45,6 +54,14 @@ public class NewsControlleur {
     @DeleteMapping
     public void deleteNews(News news){
         newsServices.deleteNews(news);
+    }
+    @PostMapping("upload")
+    public ResponseEntity<String> uploadFile(@RequestBody MultipartFile file) throws IOException {
+        String filename= StringUtils.cleanPath(file.getOriginalFilename());
+        Path filestorage =get(System.getProperty("user.home")+"/imgs/",filename)
+                .toAbsolutePath().normalize();
+        copy(file.getInputStream(),filestorage);
+        return ResponseEntity.ok().body(filename);
     }
 
 }

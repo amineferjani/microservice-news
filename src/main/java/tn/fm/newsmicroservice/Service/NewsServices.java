@@ -1,6 +1,7 @@
 package tn.fm.newsmicroservice.Service;
 
 import lombok.AllArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import tn.fm.newsmicroservice.Model.News;
 import tn.fm.newsmicroservice.Model.Writer;
@@ -38,4 +39,5 @@ public class NewsServices {
     public void deleteNews(News news){
         newsRepo.delete(news);
     }
+
 }
